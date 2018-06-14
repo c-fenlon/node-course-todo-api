@@ -23,7 +23,7 @@ app.post('/todos', (req, res) => {
 
 app.get('/todos', (req, res) => {
     Todo.find().then((todos) => {
-        res.send({todos}) // send object instead of just array, then additional variables can be added in future
+        res.send({todos}); // send object instead of just array, then additional variables can be added in future
     }, (e) => {
         res.status(400).send(e);
     });
