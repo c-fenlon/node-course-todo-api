@@ -36,7 +36,7 @@ app.get('/todos/:id', (req, res) => { // :id creates id variable on request obje
 
     // validate ID
     if (!ObjectID.isValid(id)) {
-        res.status(404).send();
+        return res.status(404).send();
     }
     Todo.findById(id).then((todo) => {
         if (todo) {
