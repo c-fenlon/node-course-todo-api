@@ -1,3 +1,5 @@
+// Documentation: http://mongodb.github.io/node-mongodb-native/
+
 // const MongoClient = require('mongodb').MongoClient; // no destructuring
 // const {MongoClient} = require('mongodb'); // destructuring - equivalent to above
 const {MongoClient, ObjectID} = require('mongodb'); // destructuring - equivalent to above
