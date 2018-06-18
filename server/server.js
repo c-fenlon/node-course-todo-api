@@ -40,15 +40,42 @@ app.get('/todos/:id', (req, res) => { // :id creates id variable on request obje
         return res.status(404).send();
     }
     Todo.findById(id).then((todo) => {
+        if (! todo) {
+            return res.status(404).send();
+        } 
+        res.send(todo);
+        
+    }).catch((e) => {
+        res.status(400).send(e);
+    });
+});
+
+app.delete('/todos/:id', (req, res) => {
+    // get the ID
+    // validate ID -> return 404
+    // remove todo by ID
+        // success
+            // no doc could be found: 404
+            // found and deleted: 200
+        // error: 400 with empty body
+    
+    var id = req.params.id;
+
+    // validate ID
+    if (!ObjectID.isValid(id)) {
+        return res.status(404).send();
+    }
+    Todo.findByIdAndRemove(id).then((todo) => {
         if (todo) {
-            res.send({todo});
+            res.send(todo);
         } else {
             res.status(404).send();
         }
     }).catch((e) => {
         res.status(400).send(e);
     });
-});
+})
+
 
 app.listen(port, () => {
     console.log(`Started on port ${port}`);
