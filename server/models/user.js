@@ -89,6 +89,16 @@ UserSchema.methods.generateAuthToken = function() { // has to have a this keywor
     });
 }
 
+UserSchema.methods.removeToken = function(token) {
+    var user = this;
+
+    return user.update({
+        $pull: {
+            tokens: {token}
+        }
+    });
+}
+
 UserSchema.pre('save', function(next) { // to run something before a function
     var user = this;
 
