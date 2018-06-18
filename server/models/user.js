@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
+const bcrypt = require('bcryptjs')
 
 var UserSchema = new mongoose.Schema({
     email: {
@@ -48,9 +49,7 @@ UserSchema.statics.findByToken = function(token) {
         decoded = jwt.verify(token, 'abc123');
     } catch(e) {
         console.log(e);
-        return new Promise((resolve, reject) => {
-            reject();
-        });
+        return Promise.reject();
     }
 
     return User.findOne({
@@ -70,6 +69,21 @@ UserSchema.methods.generateAuthToken = function() { // has to have a this keywor
         return token;
     });
 }
+
+UserSchema.pre('save', function(next) { // to run something before a function
+    var user = this;
+
+    if (user.isModified('password')) { // to only encrypt password when modified, instead of every time the user object is modified
+        bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(user.password, salt, (err, hash) => {
+                user.password = hash;
+                next();
+            });
+        });
+    } else {
+        next();
+    }
+});
 
 var User = mongoose.model('User', UserSchema);
 
